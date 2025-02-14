@@ -1,0 +1,14 @@
+.fade-in-text {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px); /* Start slightly shifted down */
+  transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+}
+
+.fade-in-text.visible {
+  opacity: 1;
+  transform: translateY(0); /* Move into place */
+}
