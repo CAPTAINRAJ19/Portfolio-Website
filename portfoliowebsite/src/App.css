@@ -20,4 +20,9 @@
     font-weight: 400;
     font-style: normal;
   }
-      
+  .orbitron {
+  font-family: "Orbitron", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}   

@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
 import log from '../assets/images/navlogo.png';
 
-function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+function Navbar({ menuOpen, setMenuOpen }) {
+  const handleDownload = () => {
+    const resumeUrl = "/Dhruv_Resume.pdf"; 
+    const link = document.createElement("a");
+    link.href = resumeUrl;
+    link.download = "Dhruv_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    setMenuOpen(false); // Close menu after clicking (only affects mobile)
+  };
 
   return (
-    <nav className='flex justify-between items-center px-4 bg-white shadow-md'>
+    <nav className='flex sticky top-0 z-10 justify-between items-center px-4 bg-white shadow-md'>
       {/* Logo */}
       <div className='font-bold flex items-center' >
         <button>
@@ -15,23 +30,28 @@ function Navbar() {
 
       {/* Hamburger Menu Button for Mobile */}
       <button 
-        className='md:hidden text-3xl focus:outline-none' 
+        className='md:hidden text-3xl z-10 focus:outline-none' 
         onClick={() => setMenuOpen(!menuOpen)}>
         &#9776;
       </button>
 
       {/* Nav Links */}
-      <div style={{ fontFamily: "gruppo" }} className={`absolute md:static top-16 left-0 w-full md:w-auto bg-white md:flex md:items-center md:space-x-4 transition-all duration-300 ease-in-out ${menuOpen ? 'block' : 'hidden'}`}>
-        <div className='flex flex-col md:flex-row md:items-center w-full md:w-auto'>
-          {['Home', 'About', 'Work', 'Resume', 'Skills', 'Contact'].map((item, index) => (
-            <button 
-              key={index} 
-              onClick={() => scrollHandler(window[`section${index + 1}`])} 
-              className='hover:border-b-black hover:border-4 px-4 py-2 text-black border-4 border-white text-lg w-full md:w-auto text-center'>
-              {item}
-            </button>
-          ))}
-        </div>
+      <div 
+        style={{ fontFamily: "gruppo" }} 
+        className={`absolute md:static top-16 left-0 w-full md:w-auto bg-white md:flex md:items-center md:space-x-4 transition-all duration-300 ease-in-out 
+        ${menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} md:opacity-100 md:visible`}
+      >
+<div className='flex flex-col md:flex-row md:items-center w-full md:w-auto'>
+  {['Home', 'About', 'Work', 'Resume', 'Skills', 'Contact'].map((item, index) => (
+    <button 
+      key={index} 
+      onClick={item === 'Resume' ? handleDownload : () => scrollToSection(item.toLowerCase())} 
+      className='hover:border-b-black hover:border-4 px-4 py-2 text-black border-4 border-white text-lg w-full md:w-auto text-center'>
+      {item}
+    </button>
+  ))}
+</div>
+
       </div>
 
       {/* Social Icons */}
