@@ -26,7 +26,7 @@ const Footer = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch("https://portfolio-website-1-b7sb.onrender.com//send-message", {
+      const response = await fetch("https://portfolio-website-1-b7sb.onrender.com/send-message", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
