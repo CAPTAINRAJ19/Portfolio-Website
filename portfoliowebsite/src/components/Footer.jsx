@@ -37,7 +37,7 @@ const Footer = () => {
       const data = await response.json();
   
       if (data.success) {
-        alert("Message Sent and Stored in Database!");
+        alert("Message Sent successfully!");
         setFormData({ name: "", email: "", message: "" }); // Reset form
       } else {
         alert("Failed to send message. Please try again.");
