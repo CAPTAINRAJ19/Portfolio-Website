@@ -62,3 +62,19 @@
 .bg-neon-green {
   background-color: #0aff99;
 }
+/* Hide scrollbar but allow scrolling */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none; /* Firefox */
+}
+
+body {
+  -ms-overflow-style: none; /* IE/Edge */
+}
+html, body {
+  overflow-x: hidden;
+  width: 100vw;
+}
