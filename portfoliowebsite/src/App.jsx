@@ -1,15 +1,17 @@
-import Home from './pages/Home'
-import './App.css'
-
+import Home from './pages/Home';
+import './App.css';
+import ParticlesComponent from './components/particles';
+import { ThemeProvider } from './ThemeContext';
 
 function App() {
-
-
   return (
-
-    <Home/>
-
-  )
+    <ThemeProvider>
+      <>
+        <ParticlesComponent />
+        <Home />
+      </>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;

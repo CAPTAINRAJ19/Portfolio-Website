@@ -1,1 +1,64 @@
 @import "tailwindcss";
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+      opacity: 0;
+      transform: translateX(-50px);
+  }
+  to {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+      opacity: 0;
+      transform: translateX(50px);
+  }
+  to {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+
+/* Apply Tailwind-like utility classes */
+.animate-fadeIn {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 1s ease-in-out;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 1s ease-in-out;
+}
+
+/* Neon Effects */
+.border-neon-glow {
+  border-color: #0aff99;
+  box-shadow: 0 0 15px #0aff99;
+}
+
+.shadow-neon {
+  box-shadow: 0px 0px 15px 4px rgba(10, 255, 153, 0.8);
+}
+
+.text-neon-green {
+  color: #0aff99;
+}
+
+.bg-neon-green {
+  background-color: #0aff99;
+}

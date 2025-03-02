@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
-import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import About from '../components/About';
-import Projects from '../components/Projects';
-import Skills from '../components/Skills';
-import Footer from '../components/Footer';
+import React, { useState, useEffect, useContext } from "react";
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import About from "../components/About";
+import Projects from "../components/Projects";
+import Skills from "../components/Skills";
+import Footer from "../components/Footer";
 import { ArrowUp } from "lucide-react";
-import { motion } from "framer-motion"; // Importing Framer Motion
+import { motion } from "framer-motion";
+import { ThemeContext } from "../ThemeContext"; // Import Theme Context
 
 function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const { theme, toggleTheme } = useContext(ThemeContext); // Access theme mode
 
   // Show/hide button when scrolling
   useEffect(() => {
@@ -28,15 +30,20 @@ function Home() {
   };
 
   return (
-    <div>
-      <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-      <Hero menuOpen={menuOpen} />
-      <About />
-      <Projects />
-      <Skills />
-      <Footer />
+    <div className={`home-container ${theme}`}>
+      <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} theme={theme} />
+      <Hero menuOpen={menuOpen} theme={theme} />
+      <About theme={theme} />
+      <Projects theme={theme} />
+      <Skills theme={theme} />
+      <Footer theme={theme} />
 
-      {/* Scroll to Top Button with Animations */}
+      {/* Theme Toggle Button */}
+      <button onClick={toggleTheme} className="theme-toggle-btn">
+        Switch to {theme === "light" ? "Dark" : "Light"} Mode
+      </button>
+
+      {/* Scroll to Top Button */}
       {isVisible && (
         <motion.button
           onClick={scrollToTop}

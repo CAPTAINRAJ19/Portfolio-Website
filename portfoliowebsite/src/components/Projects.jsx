@@ -1,5 +1,6 @@
-import FadeInText from '../assets/FadeInText';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from 'react';
+import { ThemeContext } from '../ThemeContext';
+import { motion } from 'framer-motion';
 
 // Import project screenshots (3 for laptop, 3 for mobile per project)
 import project1Laptop1 from "../assets/images/project1-laptop1.png";
@@ -53,8 +54,10 @@ const projects = [
   }
 ];
 
-export default function Work() {
+const Work = () => {
+  const { theme } = useContext(ThemeContext);
   const [currentScreenshot, setCurrentScreenshot] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -64,60 +67,176 @@ export default function Work() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    
+    const section = document.getElementById('work');
+    if (section) observer.observe(section);
+    
+    return () => {
+      if (section) observer.unobserve(section);
+    };
+  }, []);
+
   return (
-    <div id="work" className="md:bg-black bg-white relative md:sticky -top-full z-10 md:pt-6 pb-6 px-4 sm:px-6 lg:px-8 text-white">
-      <FadeInText text="WORKS " />
-      <h1 style={{fontFamily:"syncopate"}} className='text-black font-bold text-center text-3xl'>MY WORKS</h1>
+    <section 
+      id="work" 
+      className={`relative   min-h-screen py-16 px-4 sm:px-8 lg:px-16 transition-colors duration-500 ${
+        theme === 'dark' 
+          ? 'bg-black text-white' 
+          : 'bg-gray-50 text-gray-900'
+      }`}
+    >
+{/* Background gradient effect */}
+<div className="absolute inset-0 overflow-hidden">
+    <div 
+        className={`absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full
+            ${theme === 'dark' ? 'bg-[#0aff99]/50' : 'bg-teal-500/40'}
+            filter blur-[120px]`}
+    ></div>
+    <div 
+        className={`absolute bottom-1/4 left-1/4 w-[500px] h-[500px] rounded-full
+            ${theme === 'dark' ? 'bg-[#0aff99]/40' : 'bg-purple-500/40'}
+            filter blur-[120px]`}
+    ></div>
+</div>
 
-      <div className="flex flex-col space-y-10">
-        {projects.map((project, index) => (
-          <div key={project.name} className={`flex flex-col lg:flex-row items-center gap-4 ${index % 2 === 0 ? "lg:flex-row-reverse" : ""}`}>
-            <div className="w-full lg:w-1/2 flex justify-center">
 
-              <img
-                src={project.laptopScreenshots[currentScreenshot]}
-                alt={project.name}
-                className="hidden lg:block w-full h-auto object-contain transition-opacity  rounded-lg"
-              />
-              <img
-                src={project.mobileScreenshots[currentScreenshot]}
-                alt={project.name}
-                className="lg:hidden w-full h-auto object-contain transition-opacity duration-500 hover:shadow-2xl hover:shadow-[#ffbe0b] rounded-lg"
-              />
-            </div>
+      <div className="container mx-auto z-10 relative">
+        {/* Section Heading */}
+        
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.8 }}
+          className={`text-center text-4xl lg:text-5xl font-bold mb-16 ${
+            theme === 'dark' ? 'text-[#0aff99]' : 'text-teal-600'
+          }`} 
+          style={{ fontFamily: "syncopate" }}
+        >
+          MY WORKS
+        </motion.h2>
 
-     
-            <div className="w-full lg:w-1/2 text-center lg:text-left px-6">
-              <h3 style={{ fontFamily: "orbitron" }} className="text-2xl font-semibold text-[#ffd400] mb-2">{project.name}</h3>
-              <p className="text-gray-400 mb-3">{project.description}</p>
-              <p className="text-gray-300 mb-2">Tech Stack:</p>
-              <ul className="flex flex-wrap justify-center lg:justify-start gap-2">
-                {project.techStack.map((tech) => (
-                  <li
-                    key={tech}
-                    className="bg-gray-800 text-white px-4 py-2 rounded-md text-sm hover:shadow-lg hover:shadow-[#ffbe0b] transition duration-300"
-                  >
-                    {tech}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="flex gap-4 mt-4 justify-center lg:justify-start">
-                <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
-                  <button className="bg-[#ffbe0b] text-black px-4 py-2 rounded-lg hover:bg-[#ffcc33] transition duration-300 font-semibold">
-                    🚀 Try Now
-                  </button>
-                </a>
-                <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
-                  <button className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-300 font-semibold">
-                    🛠 Check GitHub
-                  </button>
-                </a>
+        <div className="flex flex-col space-y-20">
+          {projects.map((project, index) => (
+            <motion.div 
+              key={project.name} 
+              initial={{ opacity: 0, y: 50 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+              transition={{ duration: 0.8, delay: index * 0.2 }}
+              className={`flex flex-col lg:flex-row items-center gap-10 ${index % 2 === 0 ? "lg:flex-row-reverse" : ""}`}
+            >
+              {/* Project Image */}
+              <div className="w-full lg:w-1/2 flex justify-center">
+                <div className="relative group w-full">
+                  {/* Animated border */}
+                  <div className={`absolute -inset-1 rounded-lg ${
+                    theme === 'dark' 
+                      ? 'bg-gradient-to-r from-[#0aff99] via-[#0aff99]/70 to-[#0aff99]/90' 
+                      : 'bg-gradient-to-r from-teal-600 via-cyan-500 to-purple-600'
+                  } opacity-0 group-hover:opacity-100 blur-md transition-all duration-1000`}></div>
+                  
+                  {/* Screenshot container */}
+                  <div className={`relative rounded-lg overflow-hidden ${
+                    theme === 'dark' ? 'bg-auto' : 'bg-auto'
+                  } p-1`}>
+                    <img
+                      src={project.laptopScreenshots[currentScreenshot]}
+                      alt={project.name}
+                      className="hidden lg:block w-full h-auto object-contain transition-all duration-500 rounded-lg"
+                    />
+                    <img
+                      src={project.mobileScreenshots[currentScreenshot]}
+                      alt={project.name}
+                      className="lg:hidden w-full h-auto object-contain transition-all duration-500 rounded-lg"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+
+              {/* Project Description */}
+              <div className="w-full lg:w-1/2 text-center lg:text-left px-4 lg:px-6">
+                <h3 
+                  style={{ fontFamily: "orbitron" }} 
+                  className={`text-2xl font-semibold mb-4 ${
+                    theme === 'dark' ? 'text-[#0aff99]' : 'text-teal-600'
+                  }`}
+                >
+                  {project.name}
+                </h3>
+                
+                <p className={`mb-6 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {project.description}
+                </p>
+                
+                <div className="mb-4">
+                  <p className={`mb-2 font-medium ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-800'
+                  }`}>
+                    Tech Stack:
+                  </p>
+                  
+                  <ul className="flex flex-wrap justify-center lg:justify-start gap-2">
+                    {project.techStack.map((tech) => (
+                      <li
+                        key={tech}
+                        className={`px-4 py-2 rounded-md text-sm transition duration-300 ${
+                          theme === 'dark' 
+                            ? 'bg-gray-800 text-white hover:shadow-[#0aff99]/30 hover:shadow-lg' 
+                            : 'bg-gray-200 text-gray-800 hover:shadow-teal-600/20 hover:shadow-lg'
+                        }`}
+                      >
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex gap-4 mt-6 justify-center lg:justify-start">
+                  <a 
+                    href={project.liveLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`rounded-lg transition duration-300 transform hover:scale-105 ${
+                      theme === 'dark' 
+                        ? 'bg-[#0aff99] text-black hover:bg-[#0aff99]/80' 
+                        : 'bg-teal-600 text-white hover:bg-teal-700'
+                    }`}
+                  >
+                    <button className="px-4 py-2 font-semibold">
+                      🚀 Try Now
+                    </button>
+                  </a>
+                  
+                  <a 
+                    href={project.githubLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`rounded-lg transition duration-300 transform hover:scale-105 ${
+                      theme === 'dark' 
+                        ? 'bg-gray-800 text-white border border-[#0aff99]/30 hover:border-[#0aff99]/80' 
+                        : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                    }`}
+                  >
+                    <button className="px-4 py-2 font-semibold">
+                      🛠 Check GitHub
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
-}
+};
+
+export default Work;

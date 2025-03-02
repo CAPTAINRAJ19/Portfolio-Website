@@ -1,75 +1,192 @@
-import React from 'react'
-import { FaUser, FaDownload, FaRocket } from "react-icons/fa";
-import FadeInText from '../assets/FadeInText';
-import kwbg from '../assets/images/kwbg.png';
-import { useRef } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { FaDownload, FaInfoCircle } from "react-icons/fa";
+import { ThemeContext } from '../ThemeContext';
+import { motion } from 'framer-motion';
+import log from '../assets/images/pic.jpg';
 
-function About() {
-    const section2 = useRef(null);
+const About = () => {
+  const { theme } = useContext(ThemeContext);
+  const [isVisible, setIsVisible] = useState(false);
+  
+  // Animation on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    
+    const section = document.getElementById('about');
+    if (section) observer.observe(section);
+    
+    return () => {
+      if (section) observer.unobserve(section);
+    };
+  }, []);
 
-    const handleDownload = () => {
-        const resumeUrl = "/Dhruv_Resume.pdf"; 
-        const link = document.createElement("a");
-        link.href = resumeUrl;
-        link.download = "Dhruv_Resume.pdf";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      };
+  const handleDownload = () => {
+    const resumeUrl = "/Dhruv_Resume.pdf"; 
+    const link = document.createElement("a");
+    link.href = resumeUrl;
+    link.download = "Dhruv_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleKnowMore = () => {
+    alert("Functionality yet to be added");
+  };
+
+  // Animated heading component
+  const AnimatedHeading = ({ children, delay = 0 }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.8, delay }}
+      className="overflow-hidden"
+    >
+      {children}
+    </motion.div>
+  );
 
   return (
-    <>
-<div id='about' className="sticky top-0 z-10 h-screen">
-{/* For larger screens */}
-<section className="hidden md:block bg-black h-screen justify-center text-white">
-            <div className="bg-black h-full w-full justify-center">
-                <FadeInText text="ABOUT " />
-                <div className='w-auto h-screen justify-between flex'>
-                    <div className='memyselfandi w-1/2 ml-10 mt-5 rounded-2xl border-4 border-white px-8 pt-8 h-5/6'>
-                        <h1 className='text-3xl text-red-500 font-semibold' style={{fontFamily:"gruppo"}}>Hey there, I'm</h1>
-                        <h1 className='text-4xl text-red-500 font-bold' style={{fontFamily:"orbitron"}}>DHRUV RAJ SINGH</h1>
-                        <h1 style={{fontFamily:"Gruppo"}}  className='mt-10 font-semibold'>I am a self-taught full-stack developer currently pursuing a Bachelor's degree in Computer Engineering at the Army Institute of Technology, Pune. As an adept full-stack developer, I am committed to transforming ideas into groundbreaking web applications.</h1>
-                        <h1 style={{fontFamily:"Gruppo"}} className='font-semibold'>As a skilled full-stack developer, I am dedicated to turning ideas into innovative web applications.</h1>
-                        <h1 style={{fontFamily:"Gruppo"}} className='font-semibold'>I bring over 8 months of experience in front-end development and over 2 months in full-stack development. Check out my latest projects and articles, highlighting my proficiency in React.js and web development.</h1>
-                        <div className="cont flex space-x-4"><button className="bg-red-500 mt-10 text-black font-bold py-2 px-2 flex justify-center items-center rounded-2xl transition-all duration-300 ease-in-out hover:shadow-[0_0_10px_4px_rgba(234,255,0,0.8)] hover:scale-105" style={{fontFamily:"orbitron"}} onClick={handleDownload} ><FaDownload className='text-2xl'/>Download Resume</button>
-                        <button className="bg-white mt-10  text-black font-bold py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:shadow-[0_0_10px_4px_rgba(234,255,0,0.8)] hover:scale-105" style={{fontFamily:"orbitron"}}>Know More</button></div>
-                        
-                    </div>
-                    <div className='overflow-hidden border-4 border-neon shadow-neon h-4/6 mr-20 mt-16 rounded-3xl'>
-                        <img className="h-full w-full object-cover" src={kwbg} alt="Kwbg" />
-                    </div>
-                </div>
-            </div>
-        </section>
-        
+    <section 
+      id="about" 
+      className={`relative min-h-screen flex items-center justify-center py-16 px-4 md:px-8 lg:px-16 transition-colors duration-500 ${
+        theme === 'dark' 
+          ? 'bg-black text-white' 
+          : 'bg-gray-50 text-gray-900'
+      }`}
+    >
+      {/* Background gradient effect */}
+      <div className={`absolute inset-0 overflow-hidden ${theme === 'dark' ? 'opacity-20' : 'opacity-10'}`}>
+        <div className={`absolute -top-40 -right-40 w-96 h-96 rounded-full ${
+          theme === 'dark' ? 'bg-[#0aff99]' : 'bg-teal-600'
+        } filter blur-3xl`}></div>
+        <div className={`absolute -bottom-40 -left-40 w-96 h-96 rounded-full ${
+          theme === 'dark' ? 'bg-[#0aff99]/50' : 'bg-purple-400'
+        } filter blur-3xl`}></div>
+      </div>
 
-        
-        {/* For smaller screens */}
-        <section className="about  md:hidden bg-black flex justify-center items-center text-white">
-            <div className="container mx-auto flex flex-col items-center justify-center h-full w-full">
-                <FadeInText text="ABOUT " />
-                <div className="flex flex-col items-center w-full">
-                    <div className="memyselfandi w-full m-5 rounded-2xl border-4 border-white p-3.5">
-                        <h1 className="text-3xl text-yellow-400 font-gruppo font-semibold" style={{fontFamily:"gruppo"}}>Hey there, I'm</h1>
-                        <h1 className="text-2xl text-yellow-400 font-bold" style={{fontFamily:"orbitron"}}>DHRUV RAJ SINGH</h1>
-                        <h1 style={{fontFamily:"Gruppo"}} className="mt-10 font-semibold">A self taught fullstack developer currently pursuing Bachelor's in Computer Engineering at Army Institute Of Technology, Pune.</h1>
-                        <h1 style={{fontFamily:"Gruppo"}} className="font-semibold">As a skilled full-stack developer, I am dedicated to turning ideas into innovative web applications.</h1>
-                        <h1 style={{fontFamily:"Gruppo"}}  className="font-semibold">I hold more than 8 months of experience in front-end development and more than 2 months of experience in fullstack development.</h1>
-                        <h1 style={{fontFamily:"Gruppo"}}  className="font-semibold border-b-2 border-white pb-2">Explore my latest projects and articles, showcasing my expertise in React.js and web development.</h1>
-                        <div className="flex flex-col mt-4">
-                            <button className="bg-yellow-400 justify-center items-center space-x-2 flex text-black font-bold py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:shadow-[0_0_10px_4px_rgba(234,255,0,0.8)] hover:scale-105" style={{fontFamily:"orbitron"}} onClick={handleDownload} ><FaDownload className='text-2xl'/>Download Resume</button>
-                            <button className="bg-white mt-4 text-black font-bold py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:shadow-[0_0_10px_4px_rgba(234,255,0,0.8)] hover:scale-105" style={{fontFamily:"orbitron"}}>Know More</button>
-                        </div>
-                    </div>
-                    <div className="overflow-hidden border-4 border-neon shadow-neon h-64 m-5 mt-4 rounded-3xl">
-                        <img className="w-full h-full object-cover" src={kwbg} alt="Kwbg" />
-                    </div>
-                </div>
+      <div className="container mx-auto z-10">
+        {/* Section Heading */}
+        <AnimatedHeading>
+          <h2 className={`text-center text-4xl lg:text-5xl font-bold mb-16 ${
+            theme === 'dark' ? 'text-[#0aff99]' : 'text-teal-600'
+          }`} style={{ fontFamily: "orbitron" }}>
+            ABOUT ME
+          </h2>
+        </AnimatedHeading>
+
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+          {/* Left Column - Image */}
+          <motion.div 
+            className={`w-full lg:w-2/5 order-2 lg:order-1`}
+            initial={{ opacity: 0, x: -50 }}
+            animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className={`relative group`}>
+              {/* Animated border */}
+              <div className={`absolute -inset-1 rounded-2xl ${
+                theme === 'dark' 
+                  ? 'bg-gradient-to-r from-[#0aff99] via-[#0aff99]/70 to-[#0aff99]/90' 
+                  : 'bg-gradient-to-r from-teal-600 via-cyan-500 to-purple-600'
+              } opacity-75 group-hover:opacity-100 blur group-hover:blur-xl transition-all duration-1000`}></div>
+              
+              {/* Image container */}
+              <div className={`relative rounded-xl overflow-hidden aspect-square ${
+                theme === 'dark' ? 'bg-gray-900' : 'bg-white'
+              } p-1`}>
+                <img 
+                  src={log} // Replace with your image path "kwbg"
+                  alt="Dhruv Raj Singh" 
+                  className="w-full h-full object-cover rounded-lg transition-transform duration-700 group-hover:scale-110"
+                />
+              </div>
             </div>
-        </section>
-    </div>
-    </>
+          </motion.div>
+
+          {/* Right Column - Info */}
+          <motion.div 
+            className="w-full lg:w-3/5 order-1 lg:order-2"
+            initial={{ opacity: 0, x: 50 }}
+            animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            <div className={`p-6 lg:p-8 rounded-2xl ${
+              theme === 'dark' 
+                ? 'bg-gray-900/80 backdrop-blur-sm border border-[#0aff99]/30' 
+                : 'bg-white shadow-xl'
+            } transition-all duration-300 hover:shadow-2xl ${
+              theme === 'dark' ? 'hover:shadow-[#0aff99]/20' : 'hover:shadow-teal-600/20'
+            }`}>
+              <h3 className={`text-xl ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              } font-medium mb-1`} style={{ fontFamily: "gruppo" }}>
+                Hey there, I'm
+              </h3>
+              
+              <h1 className={`text-3xl lg:text-4xl font-bold mb-4 ${
+                theme === 'dark' ? 'text-[#0aff99]' : 'text-teal-600'
+              }`} style={{ fontFamily: "orbitron" }}>
+                DHRUV RAJ SINGH
+              </h1>
+              
+              <div className={`space-y-4 font-bold mb-6 ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              } text-base lg:text-lg`} style={{ fontFamily: "Gruppo" }}>
+                <p className="font-medium leading-relaxed">
+                  I am a self-taught full-stack developer currently pursuing a Bachelor's degree in Computer Engineering at the Army Institute of Technology, Pune.
+                </p>
+                
+                <p className="font-medium leading-relaxed">
+                  With 8+ months in frontend development and 2+ months in full-stack development, I turn ideas into powerful web applications.
+                </p>
+                
+                <p className="font-medium leading-relaxed">
+                  I'm passionate about creating responsive, user-friendly interfaces and scalable backend solutions that solve real-world problems.
+                </p>
+              </div>
+              
+              {/* Buttons with hover animations */}
+              <div className="flex flex-col sm:flex-row gap-4 mt-6">
+                <button 
+                  className={`group py-3 px-6 rounded-xl flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+                    theme === 'dark' 
+                      ? 'bg-[#0aff99] text-black hover:bg-[#0aff99]/80' 
+                      : 'bg-teal-600 text-white hover:bg-teal-700'
+                  }`}
+                  onClick={handleDownload}
+                >
+                  <FaDownload className={`mr-2 text-lg ${
+                    theme === 'dark' ? 'group-hover:animate-bounce' : 'group-hover:animate-bounce'
+                  }`} /> 
+                  Download Resume
+                </button>
+                
+                <button 
+                  className={`group py-3 px-6 rounded-xl flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+                    theme === 'dark' 
+                      ? 'bg-gray-800 text-white border border-[#0aff99]/30 hover:border-[#0aff99]/80' 
+                      : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                  }`}
+                  onClick={handleKnowMore}
+                >
+                  <FaInfoCircle className={`mr-2 text-lg ${
+                    theme === 'dark' ? 'text-[#0aff99] group-hover:rotate-12' : 'group-hover:rotate-12'
+                  } transition-transform duration-300`} /> 
+                  Know More
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
   );
-}
+};
 
 export default About;
